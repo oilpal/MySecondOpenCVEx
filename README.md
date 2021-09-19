@@ -3,6 +3,7 @@ Activity를 먼저 생성하고, opencv C/C++ native code를 추가한 예제
 
 -- Android NDK + CMake + OpenCV 카메라 예제 (Native C++ 프로젝트로 생성하여 구성)
 https://www.youtube.com/watch?v=oFFnyJAIJp8
+https://webnautes.tistory.com/1054?category=704164
 
 -- NDK를 이용한 애플리케이션 만들기 (CMake)  - 2016년 
 https://pr0gr4m.tistory.com/entry/NDK%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EC%95%A0%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98-%EB%A7%8C%EB%93%A4%EA%B8%B0-CMake
