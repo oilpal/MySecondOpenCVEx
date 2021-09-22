@@ -48,6 +48,9 @@ Java_com_example_opencvex_MainActivity_subtractBG(JNIEnv *env, jobject thiz,
     cvtColor(matFrame, matFrameBinary, COLOR_BGR2GRAY);
 
     absdiff(matBgFrameBinary, matFrameBinary, matSubFrame);
+
+    // 차이값이 70 이상인 것만 255(흰색)으로 이진화 시켜라라는 뜻.
+    threshold(matSubFrame, matSubFrame, 70, 255, THRESH_BINARY);
 }
 extern "C"
 JNIEXPORT void JNICALL
