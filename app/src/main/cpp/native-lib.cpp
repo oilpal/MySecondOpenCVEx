@@ -64,7 +64,15 @@ Java_com_example_opencvex_MainActivity_convertColorToGray(JNIEnv *env, jobject t
     Mat &matFrameBinary = *(Mat*)mat_frame_binary;
 
     cvtColor(matFrame, matFrameBinary, COLOR_BGR2GRAY);
-}extern "C"
+}
+
+void draw_rect(Mat& img, vector<Rect>& v_rect) {
+    for(auto it : v_rect) {
+        rectangle(img, it, CV_RGB(0, 0, 255), 2);
+    }
+}
+
+extern "C"
 JNIEXPORT void JNICALL
 Java_com_example_opencvex_MainActivity_drawContours(JNIEnv *env, jobject thiz,
                                                     jlong mat_addr_bg_frame_binary,
@@ -88,5 +96,13 @@ Java_com_example_opencvex_MainActivity_drawContours(JNIEnv *env, jobject thiz,
     std::vector< std::vector<Point>> contours;
     std::vector< Vec4i> hierarchy;
     findContours(matSubFrame.clone(), contours, hierarchy, RETR_CCOMP, CHAIN_APPROX_SIMPLE);
-    drawContours(matFrame, contours, -1, CV_RGB(255, 0, 0), 5, 8, hierarchy);
+    //drawContours(matFrame, contours, -1, CV_RGB(255, 0, 0), 5, 8, hierarchy);
+
+    // Blob labeling
+    vector< Rect > v_rect;
+    for(auto it : contours) {
+        Rect mr = boundingRect(Mat(it));
+        v_rect.push_back(mr);
+    }
+    draw_rect(matFrame, v_rect);
 }
