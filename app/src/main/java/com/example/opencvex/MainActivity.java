@@ -28,19 +28,18 @@ public class MainActivity extends AppCompatActivity
 
     private static final String TAG = "opencv";
     private Mat matInput;
+    private Mat matOldFrame;
     private Mat matResult;
 
     private CameraBridgeViewBase mOpenCvCameraView;
 
     public native void ConvertRGBtoGray(long matAddrInput, long matAddrResult);
-
+    public native void subtraceFrame(long matAddrOldFrame, long matAddrFrame, long matAddrSubFrame);
 
     static {
         System.loadLibrary("opencv_java4");
         System.loadLibrary("native-lib");
     }
-
-
 
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
         @Override
@@ -57,7 +56,6 @@ public class MainActivity extends AppCompatActivity
             }
         }
     };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,11 +119,16 @@ public class MainActivity extends AppCompatActivity
 
         matInput = inputFrame.rgba();
 
-        if ( matResult == null )
-
+        if ( matResult == null ) {
             matResult = new Mat(matInput.rows(), matInput.cols(), matInput.type());
+            matOldFrame = matInput.clone();
+            return matResult;
+        }
 
-        ConvertRGBtoGray(matInput.getNativeObjAddr(), matResult.getNativeObjAddr());
+        // ConvertRGBtoGray(matInput.getNativeObjAddr(), matResult.getNativeObjAddr());
+
+        subtraceFrame(matOldFrame.getNativeObjAddr(), matInput.getNativeObjAddr(), matResult.getNativeObjAddr());
+        matOldFrame = matInput.clone();
 
         return matResult;
     }
