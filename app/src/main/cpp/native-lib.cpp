@@ -79,6 +79,9 @@ Java_com_example_opencvex_MainActivity_drawContours(JNIEnv *env, jobject thiz,
                                                     jlong mat_addr_frame,
                                                     jlong mat_addr_sub_frame) {
     // TODO: implement drawContours()
+    float alpha = 0.01;
+    float beta = (1.0 - alpha);
+    Mat element = getStructuringElement(MORPH_RECT, Size(5, 5), Point(2, 2));
 
     Mat &matBgFrameBinary = *(Mat*)mat_addr_bg_frame_binary;
     Mat &matFrame = *(Mat*)mat_addr_frame;
@@ -87,10 +90,15 @@ Java_com_example_opencvex_MainActivity_drawContours(JNIEnv *env, jobject thiz,
 
     cvtColor(matFrame, matFrameBinary, COLOR_BGR2GRAY);
 
+    addWeighted(matFrameBinary, alpha, matBgFrameBinary, beta, 0.0, matBgFrameBinary);
+
     absdiff(matBgFrameBinary, matFrameBinary, matSubFrame);
 
     // 차이값이 70 이상인 것만 255(흰색)으로 이진화 시켜라라는 뜻.
     threshold(matSubFrame, matSubFrame, 70, 255, THRESH_BINARY);
+
+    // morphology
+    morphologyEx(matSubFrame, matSubFrame, MORPH_CLOSE, element);
 
     // find contour
     std::vector< std::vector<Point>> contours;
