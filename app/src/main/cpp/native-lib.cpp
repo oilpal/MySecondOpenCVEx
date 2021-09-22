@@ -32,3 +32,31 @@ Java_com_example_opencvex_MainActivity_subtraceFrame(JNIEnv *env, jobject thiz,
 
     subtract(matOldFrame, matFrame, matSubFrame);
 }
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_opencvex_MainActivity_subtractBG(JNIEnv *env, jobject thiz,
+                                                  jlong mat_addr_bg_frame_binary,
+                                                  jlong mat_addr_frame, jlong mat_addr_sub_frame) {
+    // TODO: implement subtraceBG()
+
+    Mat &matBgFrameBinary = *(Mat*)mat_addr_bg_frame_binary;
+    Mat &matFrame = *(Mat*)mat_addr_frame;
+    Mat matFrameBinary;
+    Mat &matSubFrame = *(Mat*)mat_addr_sub_frame;
+
+    cvtColor(matFrame, matFrameBinary, COLOR_BGR2GRAY);
+
+    absdiff(matBgFrameBinary, matFrameBinary, matSubFrame);
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_opencvex_MainActivity_convertColorToGray(JNIEnv *env, jobject thiz,
+                                                          jlong mat_frame, jlong mat_frame_binary) {
+    // TODO: implement convertColorToGray()
+
+    Mat &matFrame = *(Mat*)mat_frame;
+    Mat &matFrameBinary = *(Mat*)mat_frame_binary;
+
+    cvtColor(matFrame, matFrameBinary, COLOR_BGR2GRAY);
+}
