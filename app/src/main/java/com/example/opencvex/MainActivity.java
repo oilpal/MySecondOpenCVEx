@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity
 
         drawContours(matBgFrameBinary.getNativeObjAddr(), matInput.getNativeObjAddr(), matResult.getNativeObjAddr());
 
-
+        matResult = matInput;
         return matResult;
     }
 
