@@ -1,9 +1,11 @@
 #include <jni.h>
 #include <string>
+#include <vector>
 
 #include <opencv2/opencv.hpp>
 
 using namespace cv;
+using namespace std;
 
 extern "C"
 JNIEXPORT void JNICALL
@@ -62,4 +64,29 @@ Java_com_example_opencvex_MainActivity_convertColorToGray(JNIEnv *env, jobject t
     Mat &matFrameBinary = *(Mat*)mat_frame_binary;
 
     cvtColor(matFrame, matFrameBinary, COLOR_BGR2GRAY);
+}extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_opencvex_MainActivity_drawContours(JNIEnv *env, jobject thiz,
+                                                    jlong mat_addr_bg_frame_binary,
+                                                    jlong mat_addr_frame,
+                                                    jlong mat_addr_sub_frame) {
+    // TODO: implement drawContours()
+
+    Mat &matBgFrameBinary = *(Mat*)mat_addr_bg_frame_binary;
+    Mat &matFrame = *(Mat*)mat_addr_frame;
+    Mat matFrameBinary;
+    Mat &matSubFrame = *(Mat*)mat_addr_sub_frame;
+
+    cvtColor(matFrame, matFrameBinary, COLOR_BGR2GRAY);
+
+    absdiff(matBgFrameBinary, matFrameBinary, matSubFrame);
+
+    // 차이값이 70 이상인 것만 255(흰색)으로 이진화 시켜라라는 뜻.
+    threshold(matSubFrame, matSubFrame, 70, 255, THRESH_BINARY);
+
+    // find contour
+    std::vector< std::vector<Point>> contours;
+    std::vector< Vec4i> hierarchy;
+    findContours(matSubFrame.clone(), contours, hierarchy, RETR_CCOMP, CHAIN_APPROX_SIMPLE);
+    drawContours(matFrame, contours, -1, CV_RGB(255, 0, 0), 5, 8, hierarchy);
 }

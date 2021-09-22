@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity
     public native void convertColorToGray(long matFrame, long matFrameBinary);
     public native void subtractBG(long matAddrBgFrameBinary, long matAddrFrame, long matAddrSubFrame);
 
+    public native void drawContours(long matAddrBgFrameBinary, long matAddrFrame, long matAddrSubFrame);
     static {
         System.loadLibrary("opencv_java4");
         System.loadLibrary("native-lib");
@@ -117,6 +118,27 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+//    @Override
+//    public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
+//
+//        matInput = inputFrame.rgba();
+//
+//        if ( matResult == null ) {
+//            matResult = new Mat(matInput.rows(), matInput.cols(), matInput.type());
+//            matOldFrame = matInput.clone();
+//
+//            matBgFrameBinary = new Mat(matInput.rows(), matInput.cols(), matInput.type());
+//
+//            convertColorToGray(matOldFrame.getNativeObjAddr(), matBgFrameBinary.getNativeObjAddr());
+//            return matResult;
+//        }
+//
+//        subtractBG(matBgFrameBinary.getNativeObjAddr(), matInput.getNativeObjAddr(), matResult.getNativeObjAddr());
+//
+//
+//        return matResult;
+//    }
+
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
 
@@ -125,23 +147,17 @@ public class MainActivity extends AppCompatActivity
         if ( matResult == null ) {
             matResult = new Mat(matInput.rows(), matInput.cols(), matInput.type());
             matOldFrame = matInput.clone();
-
             matBgFrameBinary = new Mat(matInput.rows(), matInput.cols(), matInput.type());
 
             convertColorToGray(matOldFrame.getNativeObjAddr(), matBgFrameBinary.getNativeObjAddr());
             return matResult;
         }
 
-        // ConvertRGBtoGray(matInput.getNativeObjAddr(), matResult.getNativeObjAddr());
-        //subtraceFrame(matOldFrame.getNativeObjAddr(), matInput.getNativeObjAddr(), matResult.getNativeObjAddr());
-        //matOldFrame = matInput.clone();
-
-        subtractBG(matBgFrameBinary.getNativeObjAddr(), matInput.getNativeObjAddr(), matResult.getNativeObjAddr());
+        drawContours(matBgFrameBinary.getNativeObjAddr(), matInput.getNativeObjAddr(), matResult.getNativeObjAddr());
 
 
         return matResult;
     }
-
 
     protected List<? extends CameraBridgeViewBase> getCameraViewList() {
         return Collections.singletonList(mOpenCvCameraView);

@@ -8,6 +8,10 @@ project("myapplication")
 
 cmake_minimum_required(VERSION 3.10.2)
 
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 set(pathPROJECT C:/work/OpenCVEx) # 수정필요
 set(pathOPENCV ${pathPROJECT}/sdk) # 수정 필요
 set(pathLIBOPENCV_JAVA ${pathOPENCV}/native/libs/${ANDROID_ABI}/libopencv_java4.so)
